@@ -16,6 +16,7 @@ defmodule PhloxWeb.Router do
   scope "/", PhloxWeb do
     pipe_through :browser # Use the default browser stack
 
+    resources "/posts", PostController
     get "/", PageController, :index
   end
 
