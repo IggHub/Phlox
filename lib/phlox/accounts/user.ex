@@ -8,13 +8,17 @@ defmodule Phlox.Accounts.User do
     field :password_digest, :string
     field :username, :string
 
+
     timestamps()
+    # virtual fields
+    field :password, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
   end
 
   @doc false
-  def changeset(user, attrs) do
+  def changeset(user, params \\ %{}) do
     user
-    |> cast(attrs, [:username, :email, :password_digest])
-    |> validate_required([:username, :email, :password_digest])
+    |> cast(params, [:username, :email, :password, :password_confirmation])
+    |> validate_required([:username, :email, :password, :password_confirmation])
   end
 end

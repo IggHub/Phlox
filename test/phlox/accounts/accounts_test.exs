@@ -6,8 +6,8 @@ defmodule Phlox.AccountsTest do
   describe "users" do
     alias Phlox.Accounts.User
 
-    @valid_attrs %{email: "some email", password_digest: "some password_digest", username: "some username"}
-    @update_attrs %{email: "some updated email", password_digest: "some updated password_digest", username: "some updated username"}
+    @valid_attrs %{email: "some email", password: "password", password_confirmation: "password", username: "some username"}
+    @update_attrs %{email: "some updated email", password: "password2", password_confirmation: "password2", username: "some updated username"}
     @invalid_attrs %{email: nil, password_digest: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do

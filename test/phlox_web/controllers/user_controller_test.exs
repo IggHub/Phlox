@@ -3,8 +3,8 @@ defmodule PhloxWeb.UserControllerTest do
 
   alias Phlox.Accounts
 
-  @create_attrs %{email: "some email", password_digest: "some password_digest", username: "some username"}
-  @update_attrs %{email: "some updated email", password_digest: "some updated password_digest", username: "some updated username"}
+  @create_attrs %{email: "some email", password: "password", password_confirmation: "password", username: "some username"}
+  @update_attrs %{email: "some updated email", password: "password", password_confirmation: "password", username: "some updated username"}
   @invalid_attrs %{email: nil, password_digest: nil, username: nil}
 
   def fixture(:user) do
