@@ -9,7 +9,7 @@ defmodule Phlox.AccountsTest do
     @valid_attrs %{email: "some email", password: "password", password_confirmation: "password", username: "some username"}
     @update_attrs %{email: "some updated email", password: "password2", password_confirmation: "password2", username: "some updated username"}
     @invalid_attrs %{email: nil, password: nil, password_confirmation: nil, username: nil}
-
+    @fixture_attrs %{email: "some email", password_digest: "ABCDE", username: "some username"}
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
         attrs
@@ -70,7 +70,12 @@ defmodule Phlox.AccountsTest do
 
     test "password_digest value gets set to a hash" do
       changeset = User.changeset(%User{}, @valid_attrs)
-      assert get_change(changeset, :password_digest) == "ABCDE"
+      assert Comeonin.Bcrypt.checkpw(@valid_attrs.password, Ecto.Changeset.get_change(changeset, :password_digest))
+    end
+
+    test "password_digest value does not get set if password is nil" do
+      changeset = User.changeset(%User{}, %{email: "test@test.com", password: nil, password_confirmation: nil, username: "test"})
+      refute Ecto.Changeset.get_change(changeset, :password_digest)
     end
   end
 end

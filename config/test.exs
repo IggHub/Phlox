@@ -17,3 +17,5 @@ config :phlox, Phlox.Repo,
   database: "phlox_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :comeonin, bcrypt_log_rounds: 4
