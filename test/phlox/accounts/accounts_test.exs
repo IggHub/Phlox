@@ -8,7 +8,7 @@ defmodule Phlox.AccountsTest do
 
     @valid_attrs %{email: "some email", password: "password", password_confirmation: "password", username: "some username"}
     @update_attrs %{email: "some updated email", password: "password2", password_confirmation: "password2", username: "some updated username"}
-    @invalid_attrs %{email: nil, password_digest: nil, username: nil}
+    @invalid_attrs %{email: nil, password: nil, password_confirmation: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -32,7 +32,8 @@ defmodule Phlox.AccountsTest do
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some email"
-      assert user.password_digest == "some password_digest"
+      assert user.password == "password"
+      assert user.password_confirmation == "password"
       assert user.username == "some username"
     end
 
@@ -45,7 +46,8 @@ defmodule Phlox.AccountsTest do
       assert {:ok, user} = Accounts.update_user(user, @update_attrs)
       assert %User{} = user
       assert user.email == "some updated email"
-      assert user.password_digest == "some updated password_digest"
+      assert user.password == "password"
+      assert user.password_confirmation == "password"
       assert user.username == "some updated username"
     end
 

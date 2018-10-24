@@ -1,6 +1,5 @@
 defmodule PhloxWeb.PostController do
   use PhloxWeb, :controller
-
   alias Phlox.Content
   alias Phlox.Content.Post
 
