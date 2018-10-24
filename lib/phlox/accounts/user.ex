@@ -1,7 +1,7 @@
 defmodule Phlox.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-
+  import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   schema "users" do
     field :email, :string
@@ -24,7 +24,11 @@ defmodule Phlox.Accounts.User do
   end
 
   defp hash_password(changeset) do
-    changeset
-    |> put_change(:password_digest, "ABCDE")
+    if password = get_change(changeset, :password) do
+      changeset
+      |> put_change(:password_digest,  hashpwsalt(password))
+    else
+      changeset
+    end
   end
 end
