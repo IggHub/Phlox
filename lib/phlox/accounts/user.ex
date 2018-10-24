@@ -20,5 +20,11 @@ defmodule Phlox.Accounts.User do
     struct
     |> cast(params, [:username, :email, :password, :password_confirmation])
     |> validate_required([:username, :email, :password, :password_confirmation])
+    |> hash_password
+  end
+
+  defp hash_password(changeset) do
+    changeset
+    |> put_change(:password_digest, "ABCDE")
   end
 end

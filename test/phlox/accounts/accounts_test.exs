@@ -1,6 +1,6 @@
 defmodule Phlox.AccountsTest do
   use Phlox.DataCase
-
+  
   alias Phlox.Accounts
 
   describe "users" do
@@ -23,7 +23,7 @@ defmodule Phlox.AccountsTest do
       user = user_fixture()
       assert Accounts.list_users() == [user]
     end
-
+    
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
       assert Accounts.get_user!(user.id) == user
@@ -46,8 +46,8 @@ defmodule Phlox.AccountsTest do
       assert {:ok, user} = Accounts.update_user(user, @update_attrs)
       assert %User{} = user
       assert user.email == "some updated email"
-      assert user.password == "password"
-      assert user.password_confirmation == "password"
+      assert user.password == "password2"
+      assert user.password_confirmation == "password2"
       assert user.username == "some updated username"
     end
 
@@ -66,6 +66,11 @@ defmodule Phlox.AccountsTest do
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
+    end
+
+    test "password_digest value gets set to a hash" do
+      changeset = User.changeset(%User{}, @valid_attrs)
+      assert get_change(changeset, :password_digest) == "ABCDE"
     end
   end
 end
