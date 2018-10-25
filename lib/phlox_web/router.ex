@@ -18,7 +18,7 @@ defmodule PhloxWeb.Router do
 
     resources "/users", UserController
     resources "/posts", PostController
-    resources "/sessions", SessionController, only: [:new, :create]
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
     get "/", PageController, :index
   end
 
