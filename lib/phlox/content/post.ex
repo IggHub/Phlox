@@ -8,6 +8,8 @@ defmodule Phlox.Content.Post do
     field :title, :string
 
     timestamps()
+
+    belongs_to :user, Phlox.Accounts.User
   end
 
   @doc false

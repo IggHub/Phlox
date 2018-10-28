@@ -13,6 +13,8 @@ defmodule Phlox.Accounts.User do
     # virtual fields
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+
+    has_many :posts, Phlox.Content.Post
   end
 
   @doc false
