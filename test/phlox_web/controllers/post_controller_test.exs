@@ -7,6 +7,23 @@ defmodule PhloxWeb.PostControllerTest do
   @update_attrs %{body: "some updated body", title: "some updated title"}
   @invalid_attrs %{body: nil, title: nil}
 
+  alias Phlox.Accounts.User
+
+  setup do
+    {:ok, user} = create_user
+    conn = build_conn()
+    |> login_user(user)
+    {:ok, conn: conn, user: user}
+  end
+
+  defp create_user do
+    User.changeset(%User{}, %{email: "test@test.com", username: "test", password: "test", password_confirmation: "test"})
+    |> Repo.insert
+  end
+
+  defp login_user(conn, user) do
+    post conn, session_path(conn, :create), user: %{username: user.username, password: user.password}
+    
   def fixture(:post) do
     {:ok, post} = Content.create_post(@create_attrs)
     post
