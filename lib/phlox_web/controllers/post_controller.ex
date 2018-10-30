@@ -63,7 +63,7 @@ defmodule PhloxWeb.PostController do
   end
 
   def delete(conn, %{"id" => id}) do
-    post = Post.get!(assoc(conn.assigns[:user], :posts), id)
+    post = Repo.get!(assoc(conn.assigns[:user], :posts), id)
     Repo.delete!(post)
 
     conn
