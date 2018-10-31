@@ -2,6 +2,8 @@ defmodule Phlox.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
+  alias Phlox.Accounts.Role
+  alias Phlox.Content.Post
 
   schema "users" do
     field :email, :string
@@ -14,7 +16,9 @@ defmodule Phlox.Accounts.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
 
-    has_many :posts, Phlox.Content.Post
+    #associations
+    has_many :posts, Post
+    belongs_to :role, Role
   end
 
   @doc false
