@@ -24,8 +24,8 @@ defmodule Phlox.Accounts.User do
   @doc false
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:username, :email, :password, :password_confirmation])
-    |> validate_required([:username, :email, :password, :password_confirmation])
+    |> cast(params, [:username, :email, :password, :password_confirmation, :role_id])
+    |> validate_required([:username, :email, :password, :password_confirmation, :role_id])
     |> hash_password
   end
 

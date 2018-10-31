@@ -5,5 +5,7 @@ defmodule Phlox.Repo.Migrations.AddRoleIdToUsers do
     alter table :users do
       add :role_id, references(:roles)
     end
+
+    create index(:users, [:role_id])
   end
 end

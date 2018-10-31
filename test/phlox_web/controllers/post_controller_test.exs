@@ -1,6 +1,6 @@
 defmodule PhloxWeb.PostControllerTest do
   use PhloxWeb.ConnCase
-  import Ecto
+  import Ecto, only: [build_assoc: 2]
   alias Phlox.Repo
   alias Phlox.Accounts.User
   alias Phlox.Content.Post
