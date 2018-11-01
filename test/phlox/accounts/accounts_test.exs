@@ -1,7 +1,12 @@
 defmodule Phlox.AccountsTest do
   use Phlox.DataCase
-  
+  alias Phlox.TestHelper
   alias Phlox.Accounts
+
+  setup do
+    {:ok, role} = TestHelper.create_role(%{name: "user", admin: false})
+    {:ok, role: role}
+  end
 
   describe "users" do
     alias Phlox.Accounts.User
@@ -23,7 +28,7 @@ defmodule Phlox.AccountsTest do
       user = user_fixture()
       assert length(Accounts.list_users()) == length([user])
     end
-    
+
     # Problem with password and password_digest
     # test "get_user!/1 returns the user with given id" do
     #   user = user_fixture()
@@ -141,5 +146,9 @@ defmodule Phlox.AccountsTest do
       role = role_fixture()
       assert %Ecto.Changeset{} = Accounts.change_role(role)
     end
+  end
+
+  defp valid_attrs(role) do
+    Map.put(@valid_attrs, :role_id, role.id)
   end
 end

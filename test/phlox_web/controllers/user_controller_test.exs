@@ -1,6 +1,6 @@
 defmodule PhloxWeb.UserControllerTest do
   use PhloxWeb.ConnCase
-
+  alias Phlox.TestHelper
   alias Phlox.Accounts
 
   @create_attrs %{email: "some email", password: "password", password_confirmation: "password", username: "some username"}
@@ -12,6 +12,10 @@ defmodule PhloxWeb.UserControllerTest do
     user
   end
 
+  setup do
+    {:ok, role} = TestHelper.create_role(%{name: "user", admin: false})
+    {:ok, role: role}
+  end
   describe "index" do
     test "lists all users", %{conn: conn} do
       conn = get conn, user_path(conn, :index)
