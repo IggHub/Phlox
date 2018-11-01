@@ -1,142 +1,83 @@
 defmodule PhloxWeb.PostControllerTest do
   use PhloxWeb.ConnCase
-  import Ecto, only: [build_assoc: 2]
+  import Ecto
   alias Phlox.Repo
   alias Phlox.Accounts.User
   alias Phlox.Content.Post
+  alias Phlox.TestHelper
   alias Phlox.Content
 
   @create_attrs %{body: "some body", title: "some title"}
   @update_attrs %{body: "some updated body", title: "some updated title"}
   @invalid_attrs %{body: nil, title: nil}
 
-  alias Phlox.Accounts.User
-
+  @valid_attrs %{body: "some content", title: "some content"}
+  @invalid_attrs %{}
   setup do
-    {:ok, user} = create_user
-    conn = build_conn()
-    |> login_user(user)
-    {:ok, conn: conn, user: user}
+    {:ok, role} = TestHelper.create_role(%{name: "User Role", admin: false})
+    {:ok, user} = TestHelper.create_user(role, %{email: "test@test.com", username: "testuser", password: "test", password_confirmation: "test"})
+    {:ok, post} = TestHelper.create_post(user, %{title: "Test Post", body: "Test Body"})
+    conn = build_conn() |> login_user(user)
+    {:ok, conn: conn, user: user, role: role, post: post}
   end
-
-  defp create_user do
-    User.changeset(%User{}, %{email: "test@test.com", username: "test", password: "test", password_confirmation: "test"})
-    |> Repo.insert
-  end
-
   defp login_user(conn, user) do
     post conn, session_path(conn, :create), user: %{username: user.username, password: user.password}
   end
-
-  def fixture(:post) do
-    {:ok, post} = Content.create_post(@create_attrs)
-    post
+  test "lists all entries on index", %{conn: conn, user: user} do
+    conn = get conn, user_post_path(conn, :index, user)
+    assert html_response(conn, 200) =~ "Listing Posts"
   end
-
-  describe "index" do
-    test "lists all posts", %{conn: conn, user: user} do
-      conn = get conn, user_post_path(conn, :index, user)
-      assert html_response(conn, 200) =~ "Listing Posts"
-    end
-
-    test "redirects when the specified user does not exist", %{conn: conn} do
-      conn = get conn, user_post_path(conn, :index, -1)
-      assert get_flash(conn, :error) == "Invalid user!"
-      assert redirected_to(conn) == page_path(conn, :index)
-      assert conn.halted
-    end
+  test "renders form for new resources", %{conn: conn, user: user} do
+    conn = get conn, user_post_path(conn, :new, user)
+    assert html_response(conn, 200) =~ "New Post"
   end
-
-  describe "new post" do
-    test "renders form", %{conn: conn, user: user} do
-      conn = get conn, user_post_path(conn, :new, user)
-      assert html_response(conn, 200) =~ "New Post"
-    end
+  test "creates resource and redirects when data is valid", %{conn: conn, user: user} do
+    conn = post conn, user_post_path(conn, :create, user), post: @valid_attrs
+    assert redirected_to(conn) == user_post_path(conn, :index, user)
+    assert Repo.get_by(assoc(user, :posts), @valid_attrs)
   end
-
-  describe "create post" do
-    test "redirects to show when data is valid", %{conn: conn, user: user} do
-      conn = post conn, user_post_path(conn, :create, user), post: @create_attrs
-
-      # assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == user_post_path(conn, :index, user)
-
-      conn = get conn, user_post_path(conn, :index, user)
-      assert html_response(conn, 200) =~ "Listing Posts"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = post conn, user_post_path(conn, :create, user), post: @invalid_attrs
-      assert html_response(conn, 200) =~ "New Post"
+  test "does not create resource and renders errors when data is invalid", %{conn: conn, user: user} do
+    conn = post conn, user_post_path(conn, :create, user), post: @invalid_attrs
+    assert html_response(conn, 200) =~ "New Post"
+  end
+  test "shows chosen resource", %{conn: conn, user: user, post: post} do
+    conn = get conn, user_post_path(conn, :show, user, post)
+    assert html_response(conn, 200) =~ "Show Post"
+  end
+  test "renders page not found when id is nonexistent", %{conn: conn, user: user} do
+    assert_error_sent 404, fn ->
+      get conn, user_post_path(conn, :show, user, -1)
     end
   end
-
-  describe "show post" do
-    test "show chosen resource", %{conn: conn, user: user} do
-      post = build_post(user)
-      conn = get conn, user_post_path(conn, :show, user, post)
-      assert html_response(conn, 200) =~ "Show Post"
-    end
+  test "renders form for editing chosen resource", %{conn: conn, user: user, post: post} do
+    conn = get conn, user_post_path(conn, :edit, user, post)
+    assert html_response(conn, 200) =~ "Edit Post"
   end
-
-  describe "edit post" do
-    setup [:create_post]
-
-    test "renders form for editing chosen post", %{conn: conn, user: user} do
-      post = build_post(user)
-      conn = get conn, user_post_path(conn, :edit, user, post)
-      
-      assert html_response(conn, 200) =~ "Edit Post"
-    end
+  test "updates chosen resource and redirects when data is valid", %{conn: conn, user: user, post: post} do
+    conn = put conn, user_post_path(conn, :update, user, post), post: @valid_attrs
+    assert redirected_to(conn) == user_post_path(conn, :show, user, post)
+    assert Repo.get_by(Post, @valid_attrs)
   end
-
-  describe "update post" do
-    setup [:create_post]
-
-    test "redirects when data is valid", %{conn: conn, user: user} do
-      post = build_post(user)
-      conn = put conn, user_post_path(conn, :update, user, post), post: @update_attrs
-      assert redirected_to(conn) == user_post_path(conn, :show, user, post)
-      assert Repo.get_by(Post, @update_attrs)
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      post = build_post(user)
-      conn = put conn, user_post_path(conn, :update, user, post), post: %{"body" => nil}
-      assert html_response(conn, 200) =~ "Edit Post"
-    end
-
-    test "redirect when trying to edit a post for a different user", %{conn: conn, user: user} do
-      other_user = User.changeset(%User{}, %{email: "test2@test.com", username: "test2", password: "test", password_confirmation: "test"})
-      |> Repo.insert!
-      post = build_post(user)
-      conn = get conn, user_post_path(conn, :edit, other_user, post)
-      # assert get_flash(conn, :error) = "You are not authorized to modify that post!"
-      assert redirected_to(conn) == page_path(conn, :index)
-      assert conn.halted
-    end
+  test "does not update chosen resource and renders errors when data is invalid", %{conn: conn, user: user, post: post} do
+    conn = put conn, user_post_path(conn, :update, user, post), post: %{"body" => nil}
+    assert html_response(conn, 200) =~ "Edit Post"
   end
-
-  describe "delete post" do
-    setup [:create_post]
-
-    test "deletes chosen post", %{conn: conn, user: user} do
-      post = build_post(user)
-      conn = delete conn, user_post_path(conn, :delete, user, post)
-      assert redirected_to(conn) == user_post_path(conn, :index, user)
-      refute Repo.get(Post, post.id)
-    end
+  test "deletes chosen resource", %{conn: conn, user: user, post: post} do
+    conn = delete conn, user_post_path(conn, :delete, user, post)
+    assert redirected_to(conn) == user_post_path(conn, :index, user)
+    refute Repo.get(Post, post.id)
   end
-
-  defp create_post(_) do
-    post = fixture(:post)
-    {:ok, post: post}
+  test "redirects when the specified user does not exist", %{conn: conn} do
+    conn = get conn, user_post_path(conn, :index, -1)
+    assert get_flash(conn, :error) == "Invalid user!"
+    assert redirected_to(conn) == page_path(conn, :index)
+    assert conn.halted
   end
-
-  defp build_post(user) do
-    changeset = user
-    |> build_assoc(:posts)
-    |> Post.changeset(@create_attrs)
-    Repo.insert!(changeset)
+  test "redirects when trying to edit a post for a different user", %{conn: conn, role: role, post: post} do
+    {:ok, other_user} = TestHelper.create_user(role, %{email: "test2@test.com", username: "test2", password: "test", password_confirmation: "test"})
+    conn = get conn, user_post_path(conn, :edit, other_user, post)
+    assert get_flash(conn, :error) == "You are not authorized to modify that post!"
+    assert redirected_to(conn) == page_path(conn, :index)
+    assert conn.halted
   end
 end

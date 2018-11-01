@@ -2,19 +2,23 @@ defmodule Phlox.AccountsTest do
   use Phlox.DataCase
   alias Phlox.TestHelper
   alias Phlox.Accounts
+  alias Phlox.Accounts.User
 
   setup do
     {:ok, role} = TestHelper.create_role(%{name: "user", admin: false})
     {:ok, role: role}
   end
 
-  describe "users" do
-    alias Phlox.Accounts.User
+  defp valid_attrs(role) do
+    Map.put(@valid_attrs, :role_id, role.id)
+  end
 
+  describe "users" do
     @valid_attrs %{email: "some email", password: "password", password_confirmation: "password", username: "some username"}
     @update_attrs %{email: "some updated email", password: "password2", password_confirmation: "password2", username: "some updated username"}
     @invalid_attrs %{email: nil, password: nil, password_confirmation: nil, username: nil}
     @fixture_attrs %{email: "some email", password_digest: "ABCDE", username: "some username"}
+
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
         attrs
@@ -22,6 +26,12 @@ defmodule Phlox.AccountsTest do
         |> Accounts.create_user()
 
       user
+    end
+
+    @tag :skip
+    test "changeset with valid attributes", %{role: role} do
+      changeset = User.changeset(%User{}, valid_attrs(role))
+      assert changeset.valid?
     end
 
     test "list_users/0 returns all users" do
@@ -148,7 +158,9 @@ defmodule Phlox.AccountsTest do
     end
   end
 
-  defp valid_attrs(role) do
-    Map.put(@valid_attrs, :role_id, role.id)
+  test "changeset with valid attributes", %{role: role} do
+    changeset = User.changeset(%User{}, valid_attrs(role))
+    assert changeset.valid?
   end
+
 end
