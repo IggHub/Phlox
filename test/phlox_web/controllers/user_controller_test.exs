@@ -17,8 +17,17 @@ defmodule PhloxWeb.UserControllerTest do
   end
 
   setup do
-    {:ok, role} = TestHelper.create_role(%{name: "user", admin: false})
-    {:ok, role: role}
+    {:ok, user_role}     = TestHelper.create_role(%{name: "user", admin: false})
+    {:ok, nonadmin_user} = TestHelper.create_user(user_role, %{email: "nonadmin@test.com", username: "nonadmin", password: "test", password_confirmation: "test"})
+
+    {:ok, admin_role}    = TestHelper.create_role(%{name: "admin", admin: true})
+    {:ok, admin_user}    = TestHelper.create_user(admin_role, %{email: "admin@test.com", username: "admin", password: "test", password_confirmation: "test"})
+
+    {:ok, conn: build_conn(), admin_role: admin_role, user_role: user_role, nonadmin_user: nonadmin_user, admin_user: admin_user}
+  end
+
+  defp login_user(conn, user) do
+    post conn, session_path(conn, :create), user: %{username: user.username, password: user.password}
   end
 
   describe "index" do
@@ -29,8 +38,10 @@ defmodule PhloxWeb.UserControllerTest do
   end
 
   describe "new user" do
-    test "renders form", %{conn: conn} do
-      conn = get conn, user_path(conn, :new)
+    test "renders form for new resources", %{conn: conn, admin_user: admin_user} do
+      conn = conn
+      |> login_user(admin_user)
+      |> get(user_path(conn, :new))
       assert html_response(conn, 200) =~ "New User"
     end
   end
