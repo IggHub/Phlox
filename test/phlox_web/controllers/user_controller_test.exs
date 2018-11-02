@@ -11,7 +11,8 @@ defmodule PhloxWeb.UserControllerTest do
   @invalid_attrs %{email: nil, password_digest: nil, username: nil}
 
   def fixture(:user) do
-    {:ok, user} = Accounts.create_user(@create_attrs)
+    {:ok, role} = TestHelper.create_role(%{name: "some role", admin: false})
+    {:ok, user} = TestHelper.create_user(role, %{username: "some user", email: "email@gmail.com", password: "password", password_confirmation: "password"})
     user
   end
 
@@ -35,7 +36,7 @@ defmodule PhloxWeb.UserControllerTest do
   end
 
   describe "create user" do
-    test "redirects to show when data is valid", %{conn: conn} do
+    test "redirects to show when data is valid", %{conn: conn, role: role} do
       conn = post conn, user_path(conn, :create), user: @create_attrs
 
       assert %{id: id} = redirected_params(conn)
@@ -80,7 +81,7 @@ defmodule PhloxWeb.UserControllerTest do
   describe "delete user" do
     setup [:create_user]
 
-    test "deletes chosen user", %{conn: conn, user: user} do
+    test "deletes chosen user", %{conn: conn, user: user, role: role} do
       conn = delete conn, user_path(conn, :delete, user)
       assert redirected_to(conn) == user_path(conn, :index)
       assert_error_sent 404, fn ->
