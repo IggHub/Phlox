@@ -1,9 +1,8 @@
 defmodule PhloxWeb.PostController do
   use PhloxWeb, :controller
-  # import Ecto.Query
   import Ecto
-  alias Phlox.Content
   alias Phlox.Content.Post
+  alias Phlox.Accounts.RoleChecker
   alias Phlox.Repo
 
   plug :assign_user
@@ -26,7 +25,7 @@ defmodule PhloxWeb.PostController do
       conn.assigns[:user]
       |> build_assoc(:posts)
       |> Post.changeset(post_params)
-    
+
     case Repo.insert(changeset) do
       {:ok, _post} ->
         conn
@@ -45,7 +44,7 @@ defmodule PhloxWeb.PostController do
   def edit(conn, %{"id" => id}) do
     post = Repo.get!(assoc(conn.assigns[:user], :posts), id)
     changeset = Post.changeset(post)
-    
+
     render(conn, "edit.html", post: post, changeset: changeset)
   end
 
@@ -91,7 +90,7 @@ defmodule PhloxWeb.PostController do
 
   defp authorize_user(conn, _opts) do
     user = get_session(conn, :current_user)
-    if user && Integer.to_string(user.id) == conn.params["user_id"] do
+    if user && Integer.to_string(user.id) == conn.params["user_id"] || RoleChecker.is_admin?(user) do
       conn
     else
       conn
