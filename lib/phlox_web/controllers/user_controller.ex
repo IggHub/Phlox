@@ -2,7 +2,7 @@ defmodule PhloxWeb.UserController do
   use PhloxWeb, :controller
 
   alias Phlox.Accounts
-  alias Phlox.Accounts.User
+  alias Phlox.Accounts.{User, Role}
 
   plug :authorize_admin when action in [:new, :create]
   plug :authorize_user when action in [:edit, :update, :delete]
