@@ -20,7 +20,7 @@ defmodule Phlox.Mixfile do
   def application do
     [
       mod: {Phlox.Application, []},
-      extra_applications: [:logger, :runtime_tools, :comeonin]
+      extra_applications: [:logger, :runtime_tools, :comeonin, :ex_machina]
     ]
   end
 
@@ -41,6 +41,7 @@ defmodule Phlox.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:ex_machina, "~> 2.2"},
       {:comeonin, "~> 2.3"}
     ]
   end
