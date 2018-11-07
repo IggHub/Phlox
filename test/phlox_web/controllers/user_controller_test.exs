@@ -3,17 +3,17 @@ defmodule PhloxWeb.UserControllerTest do
   alias Phlox.TestHelper
   alias Phlox.Accounts.User
   alias Phlox.Repo
+  import Phlox.Factory
 
   @valid_create_attrs %{email: "test@test.com", username: "test", password: "test", password_confirmation: "test"}
   @valid_attrs %{email: "test@test.com", username: "test"}
   @invalid_attrs %{}
 
   setup do
-    {:ok, user_role}     = TestHelper.create_role(%{name: "user", admin: false})
-    {:ok, nonadmin_user} = TestHelper.create_user(user_role, %{email: "nonadmin@test.com", username: "nonadmin", password: "test", password_confirmation: "test"})
-
-{:ok, admin_role}    = TestHelper.create_role(%{name: "admin", admin: true})
-    {:ok, admin_user}    = TestHelper.create_user(admin_role, %{email: "admin@test.com", username: "admin", password: "test", password_confirmation: "test"})
+    user_role = insert(:role)
+    nonadmin_user = insert(:user, role: user_role)
+    admin_role = insert(:role, admin: true)
+    admin_user = insert(:user, role: admin_role)
 
     {:ok, conn: build_conn(), admin_role: admin_role, user_role: user_role, nonadmin_user: nonadmin_user, admin_user: admin_user}
   end
@@ -139,23 +139,21 @@ defmodule PhloxWeb.UserControllerTest do
   end
 
   @tag admin: true
-  test "deletes chosen resource when logged in as that user", %{conn: conn, user_role: user_role} do
-    {:ok, user} = TestHelper.create_user(user_role, @valid_create_attrs)
+  test "deletes chosen resource when logged in as that user", %{conn: conn, nonadmin_user: nonadmin_user} do
     conn =
-      login_user(conn, user)
-      |> delete(user_path(conn, :delete, user))
+      login_user(conn, nonadmin_user)
+      |> delete(user_path(conn, :delete, nonadmin_user))
     assert redirected_to(conn) == user_path(conn, :index)
-    refute Repo.get(User, user.id)
+    refute Repo.get(User, nonadmin_user.id)
   end
 
   @tag admin: true
-  test "deletes chosen resource when logged in as an admin", %{conn: conn, user_role: user_role, admin_user: admin_user} do
-    {:ok, user} = TestHelper.create_user(user_role, @valid_create_attrs)
+  test "deletes chosen resource when logged in as an admin", %{conn: conn, admin_user: admin_user, nonadmin_user: nonadmin_user} do
     conn =
       login_user(conn, admin_user)
-      |> delete(user_path(conn, :delete, user))
+      |> delete(user_path(conn, :delete, nonadmin_user))
     assert redirected_to(conn) == user_path(conn, :index)
-    refute Repo.get(User, user.id)
+    refute Repo.get(User, nonadmin_user.id)
   end
 
   @tag admin: true

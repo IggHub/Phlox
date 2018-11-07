@@ -14,14 +14,14 @@ defmodule PhloxWeb.SessionControllerTest do
   end
 
   test "creates a new user session for a valid user", %{conn: conn} do
-    conn = post conn, session_path(conn, :create), user: %{username: "test", password: "test"}
+    conn = post build_conn(), session_path(conn, :create), user: %{username: "test", password: "test"}
     assert get_session(conn, :current_user)
     assert get_flash(conn, :info) == "Sign in successful"
     assert redirected_to(conn) == page_path(conn, :index)
   end
 
   test "does not create session with a bad login" do
-    conn = post conn(), session_path(conn(), :create), user: %{username: "test", password: "wrong"}
+    conn = post build_conn(), session_path(conn, :create), user: %{username: "test", password: "wrong"}
     refute get_session(conn, :current_user)
     assert get_flash(conn, :error) == "Invalid username/ password combination"
     assert redirected_to(conn) == page_path(conn, :index)
