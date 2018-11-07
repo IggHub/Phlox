@@ -22,6 +22,7 @@ defmodule Phlox.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Phlox.DataCase
+      import Phlox.Factory
     end
   end
 
