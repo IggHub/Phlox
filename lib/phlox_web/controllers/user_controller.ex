@@ -21,7 +21,7 @@ defmodule PhloxWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     roles = Repo.all(Role)
     case Accounts.create_user(user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: user_path(conn, :index))

@@ -42,6 +42,7 @@ defmodule Phlox.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:ex_machina, "~> 2.2"},
+      {:earmark, "~>1.2"},
       {:comeonin, "~> 2.3"}
     ]
   end
