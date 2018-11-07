@@ -21,4 +21,12 @@ defmodule Phlox.Factory  do
       role: build(:role)
     }
   end
+
+  def post_factory do
+    %Post{
+      title: "Some Post",
+      body: "Some Post Body",
+      user: build(:user)
+    }
+  end
 end
