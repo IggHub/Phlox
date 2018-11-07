@@ -1,8 +1,5 @@
 defmodule PhloxWeb.SessionControllerTest do
   use PhloxWeb.ConnCase
-  import Ecto
-  alias Phlox.Accounts.User
-  alias Phlox.Repo
   alias Phlox.TestHelper
 
   setup do
@@ -24,7 +21,7 @@ defmodule PhloxWeb.SessionControllerTest do
   end
 
   test "does not create session with a bad login" do
-    conn = post conn, session_path(conn, :create), user: %{username: "test", password: "wrong"}
+    conn = post conn(), session_path(conn(), :create), user: %{username: "test", password: "wrong"}
     refute get_session(conn, :current_user)
     assert get_flash(conn, :error) == "Invalid username/ password combination"
     assert redirected_to(conn) == page_path(conn, :index)

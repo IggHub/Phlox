@@ -26,7 +26,7 @@ defmodule PhloxWeb.SessionController do
     |> redirect(to: page_path(conn, :index))
   end
 
-  def sign_in(user, password, conn) when is_nil(user) do
+  def sign_in(user, _password, conn) when is_nil(user) do
     failed_login(conn)
   end
 

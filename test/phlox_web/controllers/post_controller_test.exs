@@ -2,12 +2,9 @@ defmodule PhloxWeb.PostControllerTest do
   use PhloxWeb.ConnCase
   import Ecto
   alias Phlox.Repo
-  alias Phlox.Accounts.User
   alias Phlox.Content.Post
   alias Phlox.TestHelper
 
-  @create_attrs %{body: "some body", title: "some title"}
-  @update_attrs %{body: "some updated body", title: "some updated title"}
   @invalid_attrs %{body: nil, title: nil}
   @valid_attrs %{body: "some content", title: "some content"}
   @invalid_attrs %{}

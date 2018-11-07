@@ -2,8 +2,6 @@ defmodule PhloxWeb.LayoutViewTest do
   use PhloxWeb.ConnCase, async: true
   alias Phlox.TestHelper
   alias PhloxWeb.LayoutView
-  alias Phlox.Accounts.User
-  alias Phlox.Repo
 
   setup do
     {:ok, role} = TestHelper.create_role(%{name: "Some Role", admin: false})

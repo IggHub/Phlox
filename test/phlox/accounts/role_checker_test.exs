@@ -1,6 +1,6 @@
 defmodule Phlox.Accounts.RoleCheckerTest do
   use Phlox.DataCase
-  alias Phlox.Accounts.{Role, RoleChecker}
+  alias Phlox.Accounts.RoleChecker
   alias Phlox.TestHelper
 
   test "is_admin? is true when user has an admin role" do
