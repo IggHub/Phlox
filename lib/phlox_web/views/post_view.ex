@@ -3,6 +3,7 @@ defmodule PhloxWeb.PostView do
 
   def markdown(body) do
     body
-    |> Earmark.as_html
+    |> Earmark.as_html!
+    |> raw
   end
 end
