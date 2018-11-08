@@ -2,7 +2,7 @@ defmodule Phlox.Factory  do
   use ExMachina.Ecto, repo: Phlox.Repo
 
   alias Phlox.Accounts.{Role, User}
-  alias Phlox.Content.Post
+  alias Phlox.Content.{Post, Comment}
 
   def role_factory do
     %Role{
@@ -27,6 +27,15 @@ defmodule Phlox.Factory  do
       title: "Some Post",
       body: "Some Post Body",
       user: build(:user)
+    }
+  end
+
+  def comment_factory do
+    %Comment{
+      author: "Test User",
+      body: "Sample Comment",
+      approved: false,
+      post: build(:post)
     }
   end
 end

@@ -10,6 +10,7 @@ defmodule Phlox.Content.Post do
     timestamps()
 
     belongs_to :user, Phlox.Accounts.User
+    has_many :comments, Phlox.Content.Comment
   end
 
   @doc false

@@ -17,7 +17,9 @@ defmodule PhloxWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     resources "/users", UserController do
-      resources "/posts", PostController
+      resources "/posts", PostController, only: [] do
+        resources "/comments", CommentController, only: [:create, :delete, :update]
+      end
     end
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     get "/", PageController, :index
