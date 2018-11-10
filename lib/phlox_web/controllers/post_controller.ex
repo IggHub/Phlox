@@ -8,6 +8,7 @@ defmodule PhloxWeb.PostController do
   plug :assign_user
   plug :authorize_user when action in [:new, :create]
   plug :authorize_admin when action in [:update, :edit, :delete]
+  plug :set_authorization_flag
 
   def index(conn, _params) do
     posts = Repo.all(assoc(conn.assigns[:user], :posts))
@@ -121,5 +122,9 @@ defmodule PhloxWeb.PostController do
   defp is_authorized_user?(conn) do
     user = get_session(conn, :current_user)
     (user && (Integer.to_string(user.id) == conn.params["user_id"] || Phlox.Accounts.RoleChecker.is_admin?(user)))
+  end
+
+  defp set_authorization_flag(conn, _opts) do
+    assign(conn, :author_or_admin, is_authorized_user?(conn))
   end
 end

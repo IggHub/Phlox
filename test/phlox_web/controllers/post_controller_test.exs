@@ -13,14 +13,24 @@ defmodule PhloxWeb.PostControllerTest do
   setup do
     role = insert(:role)
     user = insert(:user, role: role)
+    other_user = insert(:user, role: role)
     post = insert(:post, user: user)
+    admin_role = insert(:role, admin: true)
+    admin = insert(:user, role: admin_role)
+
     conn = build_conn() |> login_user(user)
 
-    {:ok, conn: conn, user: user, role: role, post: post}
+    {:ok, conn: conn, user: user, other_user: other_user, role: role, admin: admin, post: post}
   end
+
   defp login_user(conn, user) do
     post conn, session_path(conn, :create), user: %{username: user.username, password: user.password}
   end
+
+  defp logout_user(conn, user) do
+    delete conn, session_path(conn, :delete, user)
+  end
+
   test "lists all entries on index", %{conn: conn, user: user} do
     conn = get conn, user_post_path(conn, :index, user)
     assert html_response(conn, 200) =~ "Listing Posts"
@@ -123,5 +133,30 @@ defmodule PhloxWeb.PostControllerTest do
       |> delete(user_post_path(conn, :delete, user, post))
     assert redirected_to(conn) == user_post_path(conn, :index, user)
     refute Repo.get(Post, post.id)
+  end
+
+  test "when logged in as author, shows chosen resource with author flag set to true", %{conn: conn, user: user, post: post} do
+    conn = login_user(conn, user) |> get(user_post_path(conn, :show, user, post))
+    assert html_response(conn, 200) =~ "Show Post"
+    assert conn.assigns[:author_or_admin]
+  end
+
+  test "when logged in as admin, shows chosen resource with author flag set to true", %{conn: conn, user: user, admin: admin, post: post} do
+    conn = login_user(conn, admin) |> get(user_post_path(conn, :show, user, post))
+    assert html_response(conn, 200) =~ "Show Post"
+    assert conn.assigns[:author_or_admin]
+  end
+
+  test "when not logged in, shows chosen resource with author flag set to false", %{conn: conn, post: post, user: user} do
+    conn = logout_user(conn, user) |> get(user_post_path(conn, :show, user, post))
+    assert html_response(conn, 200) =~ "Show Post"
+    refute conn.assigns[:author_or_admin]
+  end
+
+  test "when logged in as a different user, shows chosen resource with author flag set to false", %{conn: conn, other_user: other_user, user: user, post: post} do
+
+    conn = login_user(conn, other_user) |> get(user_post_path(conn, :show, user, post))
+    assert html_response(conn, 200) =~ "Show Post"
+    refute conn.assigns[:author_or_admin]
   end
 end
