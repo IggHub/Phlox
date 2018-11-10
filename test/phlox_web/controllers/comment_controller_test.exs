@@ -1,5 +1,5 @@
 defmodule PhloxWeb.CommentControllerTest do
-  import Ecto, only: [build_assoc: 2]
+  import Ecto
   import Phlox.Factory
 
   alias Phlox.Repo
@@ -18,7 +18,7 @@ defmodule PhloxWeb.CommentControllerTest do
   test "creates resource and redirects when data is valid", %{conn: conn, post: post} do
     conn = post conn, post_comment_path(conn, :create, post), comment: @valid_attrs
     assert redirected_to(conn) == user_post_path(conn, :show, post.user, post)
-    assert Repo.get_by(build_assoc(post, :comments), @valid_attrs)
+    assert Repo.get_by(assoc(post, :comments), @valid_attrs)
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn, post: post} do
