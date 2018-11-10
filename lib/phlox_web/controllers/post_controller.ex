@@ -96,14 +96,13 @@ defmodule PhloxWeb.PostController do
   end
 
   defp authorize_user(conn, _opts) do
-    user = get_session(conn, :current_user)
-    if user && Integer.to_string(user.id) == conn.params["user_id"] do
+    if is_authorized_user?(conn) do
       conn
     else
       conn
       |> put_flash(:error, "You are not authorized to modify that post!")
       |> redirect(to: page_path(conn, :index))
-      |> halt()
+      |> halt
     end
   end
 
@@ -119,4 +118,8 @@ defmodule PhloxWeb.PostController do
     end
   end
 
+  defp is_authorized_user?(conn) do
+    user = get_session(conn, :current_user)
+    (user && (Integer.to_string(user.id) == conn.params["user_id"] || Phlox.Accounts.RoleChecker.is_admin?(user)))
+  end
 end
