@@ -24,6 +24,11 @@ defmodule PhloxWeb.CommentController do
   def update(conn, _) do
   end
 
-  def delete(conn, _) do
+  def delete(conn, %{"id" => id, "post_id" => post_id}) do
+    post = Repo.get!(Post, post_id) |> Repo.preload(:user)
+    Repo.get!(Comment, id) |> Repo.delete!
+    conn
+    |> put_flash(:info, "Deleted comment!")
+    |> redirect(to: user_post_path(conn, :show, post.user, post))
   end
 end

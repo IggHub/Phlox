@@ -154,7 +154,6 @@ defmodule PhloxWeb.PostControllerTest do
   end
 
   test "when logged in as a different user, shows chosen resource with author flag set to false", %{conn: conn, other_user: other_user, user: user, post: post} do
-
     conn = login_user(conn, other_user) |> get(user_post_path(conn, :show, user, post))
     assert html_response(conn, 200) =~ "Show Post"
     refute conn.assigns[:author_or_admin]
