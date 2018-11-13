@@ -28,11 +28,16 @@ defmodule PhloxWeb.CommentControllerTest do
     assert html_response(conn, 200) =~ "Oops, something went wrong"
   end
 
-  test "deletes the comment", %{conn: conn, comment: comment, post: post} do
-    conn = delete(conn, post_comment_path(conn, :delete, post, comment))
-
+  test "deletes the comment when logged in as appropriate user", %{conn: conn, comment: comment, post: post, user: user} do
+    conn = login_user(conn, user) |> delete(post_comment_path(conn, :delete, post, comment))
     assert redirected_to(conn) == user_post_path(conn, :show, post.user, post)
     refute Repo.get(Comment, comment.id)
+  end
+
+  test "does not delete when not logged in as an apppropriate user", %{conn: conn, comment: comment, post: post} do
+    conn = conn |> delete(post_comment_path(conn, :delete, post, comment))
+    assert redirected_to(conn) == page_path(conn, :index)
+    assert Repo.get(Comment, comment.id)
   end
 
   test "udpates chosen resource and redirects when data is valid and logged in as the author", %{conn: conn, user: user, post: post, comment: comment} do
