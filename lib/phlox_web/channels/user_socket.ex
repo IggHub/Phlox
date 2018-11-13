@@ -2,7 +2,7 @@ defmodule PhloxWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", PhloxWeb.RoomChannel
+  channel "room:*", PhloxWeb.CommentChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
