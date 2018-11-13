@@ -12,7 +12,7 @@
           <%= unless @comment.approved do %>
             <button class="btn btn-xs btn-primary approve">Approve</button>
           <% end %>
-          <%= link "Delete",
+          <%=  link "Delete",
             method: :delete,
             to: post_comment_path(@conn, :delete, @post, @comment),
             class: "btn btn-xs btn-danger delete",

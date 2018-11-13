@@ -21,7 +21,21 @@ defmodule PhloxWeb.CommentController do
     end
   end
 
-  def update(conn, _) do
+  def update(conn, %{"id" => id, "post_id" => post_id, "comment" => comment_params}) do
+    post = Repo.get!(Post, post_id) |> Repo.preload(:user)
+    comment = Repo.get!(Comment, id)
+    changeset = Comment.changeset(comment, comment_params)
+
+    case Repo.update(changeset) do
+      {:ok, _} ->
+        conn
+        |> put_flash(:info, "Comment updated successfully.")
+        |> redirect(to: user_post_path(conn, :show, post.user, post))
+      {:error, _} ->
+        conn
+        |> put_flash(:info, "Failed to update comment!")
+        |> redirect(to: user_post_path(conn, :show, post.user, post))
+    end
   end
 
   def delete(conn, %{"id" => id, "post_id" => post_id}) do

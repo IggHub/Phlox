@@ -34,4 +34,14 @@ defmodule PhloxWeb.CommentControllerTest do
     assert redirected_to(conn) == user_post_path(conn, :show, post.user, post)
     refute Repo.get(Comment, comment.id)
   end
+
+  test "udpates chosen resource and redirects when data is valid and logged in as the author", %{conn: conn, user: user, post: post, comment: comment} do
+    conn = login_user(conn, user) |> put(post_comment_path(conn, :update, post, comment), comment: %{"approved" => true})
+    assert redirected_to(conn) == user_post_path(conn, :show, user, post)
+    assert Repo.get_by(Comment, %{id: comment.id, approved: true})
+  end
+
+  defp login_user(conn, user) do
+    post conn, session_path(conn, :create), user: %{username: user.username, password: user.password}
+  end
 end
