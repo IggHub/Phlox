@@ -1,7 +1,7 @@
 defmodule Phlox.CommentChannel do
   use Phlox.Web, :channel
 
-  def join("comment:lobby", payload, socket) do
+  def join("comments:" <> _comment_id, payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
     else
@@ -17,8 +17,21 @@ defmodule Phlox.CommentChannel do
 
   # It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (comment:lobby).
-  def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+  # def handle_in("shout", payload, socket) do
+  #   broadcast socket, "shout", payload
+  #   {:noreply, socket}
+  # end
+  def handle_in("CREATED_COMMENT", payload, socket) do
+    broadcast socket, "CREATED_COMMENT", payload
+    {:noreply, socket}
+  end
+  def handle_in("APPROVED_COMMENT", payload, socket) do
+    broadcast socket, "APPROVED_COMMENT", payload
+    {:noreply, socket}
+  end
+
+  def handle_in("DELETED_COMMENT", payload, socket) do
+    broadcast socket, "DELETED_COMMENT", payload
     {:noreply, socket}
   end
 
