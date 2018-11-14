@@ -79,7 +79,7 @@ $("input[type=submit]").on("click", (event) => {
   channel.push(CREATED_COMMENT, { author: "test", body: "body" })
 })
 
-const postId = 2;
+const postId = $("#post-id").val()
 const channel = socket.channel(`comments:${postId}`, {});
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
