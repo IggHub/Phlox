@@ -66,6 +66,14 @@ const CREATED_COMMENT  = "CREATED_COMMENT"
 const APPROVED_COMMENT = "APPROVED_COMMENT"
 const DELETED_COMMENT  = "DELETED_COMMENT"
 
+
+$("input[type=submit]").on("click", (event) => {
+  event.preventDefault()
+  channel.push(CREATED_COMMENT, { author: "test", body: "body" })
+})
+
+const postId = $("#post-id").val()
+const channel = socket.channel(`comments:${postId}`, {});
 channel.on(CREATED_COMMENT, (payload) => {
   console.log("Created comment", payload)
 });
@@ -76,13 +84,6 @@ channel.on(DELETED_COMMENT, (payload) => {
   console.log("Deleted comment", payload)
 });
 
-$("input[type=submit]").on("click", (event) => {
-  event.preventDefault()
-  channel.push(CREATED_COMMENT, { author: "test", body: "body" })
-})
-
-const postId = $("#post-id").val()
-const channel = socket.channel(`comments:${postId}`, {});
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) });
