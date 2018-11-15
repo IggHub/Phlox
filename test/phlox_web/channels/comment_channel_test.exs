@@ -1,5 +1,5 @@
 defmodule PhloxWeb.CommentChannelTest do
-  use Phlox.ChannelCase
+  use PhloxWeb.ChannelCase
 
   alias PhloxWeb.CommentChannel
 
