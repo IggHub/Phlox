@@ -1,4 +1,4 @@
-defmodule Phlox.CommentHelper do
+defmodule PhloxWeb.CommentHelper do
   alias Phlox.Content.{Post, Comment}
   alias Phlox.Accounts.User
   alias Phlox.Repo

@@ -1,6 +1,6 @@
-defmodule Phlox.CommentChannel do
-  use Phlox.Web, :channel
-  alias Phlox.CommentHelper
+defmodule PhloxWeb.CommentChannel do
+  use PhloxWeb, :channel
+  alias PhloxWeb.CommentHelper
 
   def join("comments:" <> _comment_id, payload, socket) do
     if authorized?(payload) do
