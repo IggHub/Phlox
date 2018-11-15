@@ -1,7 +1,7 @@
-defmodule Phlox.CommentChannelTest do
+defmodule PhloxWeb.CommentChannelTest do
   use Phlox.ChannelCase
 
-  alias Phlox.CommentChannel
+  alias PhloxWeb.CommentChannel
 
   setup do
     {:ok, _, socket} =
