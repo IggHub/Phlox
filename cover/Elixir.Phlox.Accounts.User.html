@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Accounts.User.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox/accounts/user.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+        |  defmodule Phlox.Accounts.User do
+        |    use Ecto.Schema
+        |    import Ecto.Changeset
+        |    import Comeonin.Bcrypt, only: [hashpwsalt: 1]
+        |    alias Phlox.Accounts.Role
+        |    alias Phlox.Content.Post
+        |  
+<font color=red>     0..|    schema "users" do</font>
+        |      field :email, :string
+        |      field :password_digest, :string
+        |      field :username, :string
+        |  
+        |  
+        |      timestamps()
+        |      # virtual fields
+        |      field :password, :string, virtual: true
+        |      field :password_confirmation, :string, virtual: true
+        |  
+        |      #associations
+        |      has_many :posts, Post
+        |      belongs_to :role, Role
+        |    end
+        |  
+        |    @doc false
+        |    def changeset(struct, params \\ %{}) do
+        |      struct
+        |      |&gt; cast(params, [:username, :email, :password, :password_confirmation, :role_id])
+        |      |&gt; validate_required([:username, :email, :password, :password_confirmation, :role_id])
+        |      |&gt; hash_password
+        |    end
+        |  
+        |    defp hash_password(changeset) do
+        |      if password = get_change(changeset, :password) do
+        |        changeset
+        |        |&gt; put_change(:password_digest,  hashpwsalt(password))
+        |      else
+        |        changeset
+        |      end
+        |    end
+        |  end
+</pre>
+</body>
+</html>

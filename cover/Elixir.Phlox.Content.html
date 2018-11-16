@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Content.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox/content/content.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+        |  defmodule Phlox.Content do
+        |    @moduledoc """
+        |    The Content context.
+        |    """
+        |  
+        |    import Ecto.Query, warn: false
+        |    alias Phlox.Repo
+        |  
+        |    alias Phlox.Content.Post
+        |  
+        |    @doc """
+        |    Returns the list of posts.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; list_posts()
+        |        [%Post{}, ...]
+        |  
+        |    """
+        |    def list_posts do
+<font color=red>     0..|      Repo.all(Post)</font>
+        |    end
+        |  
+        |    @doc """
+        |    Gets a single post.
+        |  
+        |    Raises `Ecto.NoResultsError` if the Post does not exist.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; get_post!(123)
+        |        %Post{}
+        |  
+        |        iex&gt; get_post!(456)
+        |        ** (Ecto.NoResultsError)
+        |  
+        |    """
+<font color=red>     0..|    def get_post!(id), do: Repo.get!(Post, id)</font>
+        |  
+        |    @doc """
+        |    Creates a post.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; create_post(%{field: value})
+        |        {:ok, %Post{}}
+        |  
+        |        iex&gt; create_post(%{field: bad_value})
+        |        {:error, %Ecto.Changeset{}}
+        |  
+        |    """
+<font color=red>     0..|    def create_post(attrs \\ %{}) do</font>
+        |      %Post{}
+        |      |&gt; Post.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.insert()</font>
+        |    end
+        |  
+        |    @doc """
+        |    Updates a post.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; update_post(post, %{field: new_value})
+        |        {:ok, %Post{}}
+        |  
+        |        iex&gt; update_post(post, %{field: bad_value})
+        |        {:error, %Ecto.Changeset{}}
+        |  
+        |    """
+        |    def update_post(%Post{} = post, attrs) do
+        |      post
+        |      |&gt; Post.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.update()</font>
+        |    end
+        |  
+        |    @doc """
+        |    Deletes a Post.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; delete_post(post)
+        |        {:ok, %Post{}}
+        |  
+        |        iex&gt; delete_post(post)
+        |        {:error, %Ecto.Changeset{}}
+        |  
+        |    """
+        |    def delete_post(%Post{} = post) do
+<font color=red>     0..|      Repo.delete(post)</font>
+        |    end
+        |  
+        |    @doc """
+        |    Returns an `%Ecto.Changeset{}` for tracking post changes.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; change_post(post)
+        |        %Ecto.Changeset{source: %Post{}}
+        |  
+        |    """
+        |    def change_post(%Post{} = post) do
+<font color=red>     0..|      Post.changeset(post, %{})</font>
+        |    end
+        |  
+        |    alias Phlox.Content.Comment
+        |  
+        |    @doc """
+        |    Returns the list of comments.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; list_comments()
+        |        [%Comment{}, ...]
+        |  
+        |    """
+        |    def list_comments do
+<font color=red>     0..|      Repo.all(Comment)</font>
+        |    end
+        |  
+        |    @doc """
+        |    Gets a single comment.
+        |  
+        |    Raises `Ecto.NoResultsError` if the Comment does not exist.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; get_comment!(123)
+        |        %Comment{}
+        |  
+        |        iex&gt; get_comment!(456)
+        |        ** (Ecto.NoResultsError)
+        |  
+        |    """
+<font color=red>     0..|    def get_comment!(id), do: Repo.get!(Comment, id)</font>
+        |  
+        |    @doc """
+        |    Creates a comment.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; create_comment(%{field: value})
+        |        {:ok, %Comment{}}
+        |  
+        |        iex&gt; create_comment(%{field: bad_value})
+        |        {:error, %Ecto.Changeset{}}
+        |  
+        |    """
+<font color=red>     0..|    def create_comment(attrs \\ %{}) do</font>
+        |      %Comment{}
+        |      |&gt; Comment.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.insert()</font>
+        |    end
+        |  
+        |    @doc """
+        |    Updates a comment.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; update_comment(comment, %{field: new_value})
+        |        {:ok, %Comment{}}
+        |  
+        |        iex&gt; update_comment(comment, %{field: bad_value})
+        |        {:error, %Ecto.Changeset{}}
+        |  
+        |    """
+        |    def update_comment(%Comment{} = comment, attrs) do
+        |      comment
+        |      |&gt; Comment.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.update()</font>
+        |    end
+        |  
+        |    @doc """
+        |    Deletes a Comment.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; delete_comment(comment)
+        |        {:ok, %Comment{}}
+        |  
+        |        iex&gt; delete_comment(comment)
+        |        {:error, %Ecto.Changeset{}}
+        |  
+        |    """
+        |    def delete_comment(%Comment{} = comment) do
+<font color=red>     0..|      Repo.delete(comment)</font>
+        |    end
+        |  
+        |    @doc """
+        |    Returns an `%Ecto.Changeset{}` for tracking comment changes.
+        |  
+        |    ## Examples
+        |  
+        |        iex&gt; change_comment(comment)
+        |        %Ecto.Changeset{source: %Comment{}}
+        |  
+        |    """
+        |    def change_comment(%Comment{} = comment) do
+<font color=red>     0..|      Comment.changeset(comment, %{})</font>
+        |    end
+        |  end
+</pre>
+</body>
+</html>

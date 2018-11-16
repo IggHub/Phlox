@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Factory.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/test/support/factory.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+<font color=red>     0..|  defmodule Phlox.Factory  do</font>
+<font color=red>     0..|    use ExMachina.Ecto, repo: Phlox.Repo</font>
+        |  
+        |    alias Phlox.Accounts.{Role, User}
+        |    alias Phlox.Content.{Post, Comment}
+        |  
+        |    def role_factory do
+        |      %Role{
+        |        name: sequence(:name, &amp;"Test Role #{&amp;1}"),
+        |        admin: false
+        |      }
+        |    end
+        |  
+        |    def user_factory do
+        |      %User{
+        |        username: sequence(:username, &amp;"User #{&amp;1}"),
+        |        email: "test@test.com",
+        |        password: "test1234",
+        |        password_confirmation: "test1234",
+        |        password_digest: Comeonin.Bcrypt.hashpwsalt("test1234"),
+        |        role: build(:role)
+        |      }
+        |    end
+        |  
+        |    def post_factory do
+        |      %Post{
+        |        title: "Some Post",
+        |        body: "Some Post Body",
+        |        user: build(:user)
+        |      }
+        |    end
+        |  
+        |    def comment_factory do
+        |      %Comment{
+        |        author: "Test User",
+        |        body: "Sample Comment",
+        |        approved: false,
+        |        post: build(:post)
+        |      }
+        |    end
+        |  end
+</pre>
+</body>
+</html>

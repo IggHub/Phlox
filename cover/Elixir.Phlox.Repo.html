@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Repo.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox/repo.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+<font color=red>     0..|  defmodule Phlox.Repo do</font>
+        |    use Ecto.Repo, otp_app: :phlox
+        |  
+        |    @doc """
+        |    Dynamically loads the repository url from the
+        |    DATABASE_URL environment variable.
+        |    """
+        |    def init(_, opts) do
+        |      {:ok, Keyword.put(opts, :url, System.get_env("DATABASE_URL"))}
+        |    end
+        |  end
+</pre>
+</body>
+</html>

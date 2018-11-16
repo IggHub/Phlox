@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Accounts.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox/accounts/accounts.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+        |  defmodule Phlox.Accounts do
+        |    import Ecto.Query, warn: false
+        |    alias Phlox.Repo
+        |  
+        |    alias Phlox.Accounts.User
+        |    alias Phlox.Accounts.Role
+        |  
+        |    def list_users do
+<font color=red>     0..|      Repo.all(User)</font>
+        |    end
+        |  
+<font color=red>     0..|    def get_user!(id), do: Repo.get!(User, id)</font>
+        |  
+<font color=red>     0..|    def create_user(attrs \\ %{}) do</font>
+        |      %User{}
+        |      |&gt; User.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.insert()</font>
+        |    end
+        |  
+        |    def update_user(%User{} = user, attrs) do
+        |      user
+        |      |&gt; User.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.update()</font>
+        |    end
+        |  
+        |    def delete_user(%User{} = user) do
+<font color=red>     0..|      Repo.delete(user)</font>
+        |    end
+        |  
+        |    def change_user(%User{} = user) do
+<font color=red>     0..|      User.changeset(user, %{})</font>
+        |    end
+        |  
+        |    def list_roles do
+<font color=red>     0..|      Repo.all(Role)</font>
+        |    end
+        |  
+<font color=red>     0..|    def get_role!(id), do: Repo.get!(Role, id)</font>
+        |  
+<font color=red>     0..|    def create_role(attrs \\ %{}) do</font>
+        |      %Role{}
+        |      |&gt; Role.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.insert()</font>
+        |    end
+        |  
+        |    def update_role(%Role{} = role, attrs) do
+        |      role
+        |      |&gt; Role.changeset(attrs)
+<font color=red>     0..|      |&gt; Repo.update()</font>
+        |    end
+        |  
+        |    def delete_role(%Role{} = role) do
+<font color=red>     0..|      Repo.delete(role)</font>
+        |    end
+        |  
+        |    def change_role(%Role{} = role) do
+<font color=red>     0..|      Role.changeset(role, %{})</font>
+        |    end
+        |  end
+</pre>
+</body>
+</html>

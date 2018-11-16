@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.DataCase.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/test/support/data_case.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+     1..|  defmodule Phlox.DataCase do
+        |    @moduledoc """
+        |    This module defines the setup for tests requiring
+        |    access to the application's data layer.
+        |  
+        |    You may define functions here to be used as helpers in
+        |    your tests.
+        |  
+        |    Finally, if the test case interacts with the database,
+        |    it cannot be async. For this reason, every test runs
+        |    inside a transaction which is reset at the beginning
+        |    of the test unless the test case is marked as async.
+        |    """
+        |  
+        |    use ExUnit.CaseTemplate
+        |  
+        |    using do
+        |      quote do
+        |        alias Phlox.Repo
+        |  
+        |        import Ecto
+        |        import Ecto.Changeset
+        |        import Ecto.Query
+        |        import Phlox.DataCase
+        |        import Phlox.Factory
+        |      end
+        |    end
+        |  
+        |    setup tags do
+        |      :ok = Ecto.Adapters.SQL.Sandbox.checkout(Phlox.Repo)
+        |  
+        |      unless tags[:async] do
+        |        Ecto.Adapters.SQL.Sandbox.mode(Phlox.Repo, {:shared, self()})
+        |      end
+        |  
+        |      :ok
+        |    end
+        |  
+        |    @doc """
+        |    A helper that transform changeset errors to a map of messages.
+        |  
+        |        assert {:error, changeset} = Accounts.create_user(%{password: "short"})
+        |        assert "password is too short" in errors_on(changeset).password
+        |        assert %{password: ["password is too short"]} = errors_on(changeset)
+        |  
+        |    """
+        |    def errors_on(changeset) do
+        |      Ecto.Changeset.traverse_errors(changeset, fn {message, opts} -&gt;
+        |        Enum.reduce(opts, message, fn {key, value}, acc -&gt;
+        |          String.replace(acc, "%{#{key}}", to_string(value))
+        |        end)
+        |      end)
+        |    end
+        |  end
+</pre>
+</body>
+</html>

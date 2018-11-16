@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.PhloxWeb.Router.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox_web/router.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+<font color=red>     0..|  defmodule PhloxWeb.Router do</font>
+        |    use PhloxWeb, :router
+        |  
+        |    pipeline :browser do
+        |      plug :accepts, ["html"]
+        |      plug :fetch_session
+        |      plug :fetch_flash
+        |      plug :protect_from_forgery
+        |      plug :put_secure_browser_headers
+        |    end
+        |  
+        |    pipeline :api do
+        |      plug :accepts, ["json"]
+        |    end
+        |  
+        |    scope "/", PhloxWeb do
+        |      pipe_through :browser # Use the default browser stack
+        |  
+        |      resources "/users", UserController do
+        |        resources "/posts", PostController
+        |      end
+        |  
+        |      resources "/posts", PostController, only: [] do
+        |        resources "/comments", CommentController, only: [:create, :delete, :update]
+        |      end
+        |  
+        |      resources "/sessions", SessionController, only: [:new, :create, :delete]
+        |      get "/", PageController, :index
+        |    end
+        |  
+        |    # Other scopes may use custom stacks.
+        |    # scope "/api", PhloxWeb do
+        |    #   pipe_through :api
+        |    # end
+        |  end
+</pre>
+</body>
+</html>

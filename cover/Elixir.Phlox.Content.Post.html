@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Content.Post.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox/content/post.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+        |  defmodule Phlox.Content.Post do
+        |    use Ecto.Schema
+        |    import Ecto.Changeset
+        |  
+        |  
+    10..|    schema "posts" do
+        |      field :body, :string
+        |      field :title, :string
+        |  
+        |      timestamps()
+        |  
+        |      belongs_to :user, Phlox.Accounts.User
+        |      has_many :comments, Phlox.Content.Comment
+        |    end
+        |  
+        |    @doc false
+        |    def changeset(post, attrs \\ %{}) do
+        |      post
+        |      |&gt; cast(attrs, [:title, :body])
+        |      |&gt; validate_required([:title, :body])
+        |      |&gt; strip_unsafe_body(attrs)
+        |    end
+        |  
+        |    defp strip_unsafe_body(model, %{"body" =&gt; nil}) do
+        |      model
+        |    end
+        |  
+        |    defp strip_unsafe_body(model, %{"body" =&gt; body}) do
+        |      {:safe, clean_body} = Phoenix.HTML.html_escape(body)
+        |      model |&gt; put_change(:body, clean_body)
+        |    end
+        |  
+        |    defp strip_unsafe_body(model, _) do
+        |      model
+        |    end
+        |  end
+</pre>
+</body>
+</html>

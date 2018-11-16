@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.PhloxWeb.SessionController.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox_web/controllers/session_controller.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+<font color=red>     0..|  defmodule PhloxWeb.SessionController do</font>
+        |    import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+        |    use PhloxWeb, :controller
+        |    alias Phlox.Accounts.User
+        |    alias Phlox.Repo
+        |  
+        |    plug :scrub_params, "user" when action in [:create]
+        |  
+        |    def new(conn, _params) do
+        |      render conn, "new.html", changeset: User.changeset(%User{})
+        |    end
+        |  
+        |    def create(conn, %{"user" =&gt; %{"username" =&gt; username, "password" =&gt; password}}) when not is_nil(username) and not is_nil(password) do
+        |      user = Repo.get_by(User, username: username)
+        |      sign_in(user, password, conn)
+        |    end
+        |  
+        |    def create(conn, _) do
+        |      failed_login(conn)
+        |    end
+        |  
+        |    def delete(conn, _params) do
+        |      conn
+        |      |&gt; delete_session(:current_user)
+        |      |&gt; put_flash(:info, "Signed out successfully!")
+        |      |&gt; redirect(to: page_path(conn, :index))
+        |    end
+        |  
+        |    def sign_in(user, _password, conn) when is_nil(user) do
+        |      failed_login(conn)
+        |    end
+        |  
+        |    def sign_in(user, password, conn) do
+        |      if checkpw(password, user.password_digest) do
+        |        conn
+        |        |&gt; put_session(:current_user, %{id: user.id, username: user.username, role_id: user.role_id})
+        |        |&gt; put_flash(:info, "Sign in successful")
+        |        |&gt; redirect(to: page_path(conn, :index))
+        |      else
+        |        failed_login(conn)
+        |      end
+        |    end
+        |  
+        |    def failed_login(conn) do
+        |      dummy_checkpw()
+        |      conn
+        |      |&gt; put_session(:current_user, nil)
+        |      |&gt; put_flash(:error, "Invalid username/ password combination")
+        |      |&gt; redirect(to: page_path(conn, :index))
+        |      |&gt; halt()
+        |    end
+        |  end
+</pre>
+</body>
+</html>

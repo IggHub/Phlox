@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>cover/Elixir.Phlox.Content.Comment.html</title>
+</head><body style='background-color: white; color: black'>
+<pre>
+File generated from /Users/iggy/bloc/Projects/phlox/lib/phlox/content/comment.ex by COVER 2018-11-15 at 18:04:33
+
+****************************************************************************
+
+        |  defmodule Phlox.Content.Comment do
+        |    use Ecto.Schema
+        |    import Ecto.Changeset
+        |  
+        |  
+     8..|    schema "comments" do
+        |      field :approved, :boolean, default: false
+        |      field :author, :string
+        |      field :body, :string
+        |  
+        |      timestamps()
+        |      belongs_to :post, Phlox.Content.Post
+        |    end
+        |  
+        |    @doc false
+        |    def changeset(comment, attrs \\ %{}) do
+        |      comment
+        |      |&gt; cast(attrs, [:author, :body, :approved])
+        |      |&gt; validate_required([:author, :body, :approved])
+        |    end
+        |  end
+</pre>
+</body>
+</html>
