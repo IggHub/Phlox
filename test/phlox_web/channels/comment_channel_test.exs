@@ -2,13 +2,13 @@ defmodule PhloxWeb.CommentChannelTest do
   use PhloxWeb.ChannelCase
 
   alias PhloxWeb.CommentChannel
-  alias Phlox.Factory
+  import Phlox.Factory
 
   setup do
     # why not user = insert(:user) and why alias Phlox.Factory instead of import Phlox.Factory?
-    user = Factory.create(:user)
-    post = Factory.create(:post, user: user)
-    comment = Factory.create(:comment, post: post, approved: false)
+    user = insert(:user)
+    post = insert(:post, user: user)
+    comment = insert(:comment, post: post, approved: false)
 
     {:ok, _, socket} = socket("user_id", %{user: user.id})
     |> subscribe_and_join(CommentChannel, "comments:#{post.id}")
@@ -30,6 +30,6 @@ defmodule PhloxWeb.CommentChannelTest do
     push socket, "CREATED_COMMENT", %{"body" => "Test Post", "author" => "Test Author", "postId" => post.id}
     expected = %{"body" => "Test Post", "author" => "Test Author"}
 
-    assert broadcast "CREATED_COMMENT", expected
+    assert_broadcast "CREATED_COMMENT", expected
   end
 end
