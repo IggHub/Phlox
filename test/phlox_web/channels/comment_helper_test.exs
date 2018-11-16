@@ -38,10 +38,10 @@ defmodule PhloxWeb.CommentHelperTest do
 
   test "deletes a comment when an authorized user", %{post: post, comment: comment, socket: socket} do
     {:ok, comment} = CommentHelper.delete(%{"postId" => post.id, "commentId" => comment.id}, socket)
-    refute Repo.get(Comment, comment.id)
+    refute Repo.get_by(Comment, id: comment.id)
   end
 
-  test "does not delete a comment when not an authorized user", %{post: post, comment: comment, socket: socket} do
+  test "does not delete a comment when not an authorized user", %{post: post, comment: comment} do
     {:error, message} = CommentHelper.delete(%{"postId" => post.id, "commentId" => comment.id}, %{})
     assert message == "User is not authorized"
   end

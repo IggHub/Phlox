@@ -5,7 +5,6 @@ defmodule PhloxWeb.CommentChannelTest do
   import Phlox.Factory
 
   setup do
-    # why not user = insert(:user) and why alias Phlox.Factory instead of import Phlox.Factory?
     user = insert(:user)
     post = insert(:post, user: user)
     comment = insert(:comment, post: post, approved: false)
@@ -28,8 +27,6 @@ defmodule PhloxWeb.CommentChannelTest do
 
   test "CREATED_COMMENT broadcasts to comments:*", %{socket: socket, post: post} do
     push socket, "CREATED_COMMENT", %{"body" => "Test Post", "author" => "Test Author", "postId" => post.id}
-    expected = %{"body" => "Test Post", "author" => "Test Author"}
-
-    assert_broadcast "CREATED_COMMENT", expected
+    assert_broadcast "CREATED_COMMENT", %{"body" => "Test Post", "author" => "Test Author"}
   end
 end

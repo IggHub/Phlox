@@ -46,7 +46,7 @@ defmodule PhloxWeb.CommentControllerTest do
     assert Repo.get_by(Comment, %{id: comment.id, approved: true})
   end
 
-  test "does not update comment when not logged in as an authorized user", %{conn: conn, user: user, post: post, comment: comment} do
+  test "does not update comment when not logged in as an authorized user", %{conn: conn, post: post, comment: comment} do
     conn = put(conn, post_comment_path(conn, :update, post, comment), comment: %{"approved" => true})
     assert redirected_to(conn) == page_path(conn, :index)
     refute Repo.get_by(Comment, %{id: comment.id, approved: true})
